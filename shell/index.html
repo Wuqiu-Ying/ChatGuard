@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ChatGuard · 聊天反诈</title>
+<style>
+  :root{
+    --bg:#F4F5F7; --card:#fff; --ink:#1A1D24; --ink2:#5C6273; --ink3:#8A90A0;
+    --line:#E6E8EE; --brand:#2F6FED; --brand-bg:#EDF2FE;
+    --crit:#D93025; --high:#E8710A; --med:#B8860B; --low:#1E8E3E; --none:#5F6368;
+    --r:14px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);
+       font:15px/1.6 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+       padding:0 0 40px}
+  .wrap{max-width:680px;margin:0 auto;padding:0 14px}
+
+  header{padding:22px 0 14px}
+  .logo{display:flex;align-items:center;gap:9px;font-size:19px;font-weight:700;letter-spacing:.2px}
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--brand)}
+  .sub{color:var(--ink3);font-size:12.5px;margin-top:5px}
+
+  .card{background:var(--card);border-radius:var(--r);padding:16px;
+        box-shadow:0 1px 2px rgba(16,24,40,.04),0 1px 3px rgba(16,24,40,.06);
+        margin-bottom:12px}
+  .card h2{margin:0 0 12px;font-size:14px;color:var(--ink2);font-weight:600}
+
+  .tabs{display:flex;gap:8px;margin-bottom:12px}
+  .tab{flex:1;text-align:center;padding:9px;border-radius:10px;background:#F2F3F6;
+       color:var(--ink2);font-size:14px;cursor:pointer;transition:.15s}
+  .tab.on{background:var(--brand-bg);color:var(--brand);font-weight:600}
+
+  textarea{width:100%;min-height:150px;border:1px solid var(--line);border-radius:10px;
+           padding:11px;font:inherit;resize:vertical;outline:none;background:#FCFCFD}
+  textarea:focus{border-color:var(--brand);background:#fff}
+
+  .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .chip{padding:6px 11px;border-radius:999px;background:#F2F3F6;color:var(--ink2);
+        font-size:12.5px;cursor:pointer;border:1px solid transparent}
+  .chip.on{background:var(--brand-bg);color:var(--brand);border-color:#CFDDFB}
+
+  .drop{border:1.5px dashed #CBD2DE;border-radius:12px;padding:26px 14px;text-align:center;
+        color:var(--ink3);cursor:pointer;background:#FBFCFE}
+  .drop.has{border-style:solid;border-color:var(--brand);background:var(--brand-bg)}
+  .drop img{max-width:100%;max-height:200px;border-radius:8px}
+
+  button.primary{width:100%;padding:13px;border:0;border-radius:11px;background:var(--brand);
+        color:#fff;font:600 15px/1 inherit;margin-top:14px;cursor:pointer}
+  button.primary:disabled{background:#C9D3E6;cursor:not-allowed}
+  button.ghost{width:100%;padding:11px;border:1px solid var(--line);border-radius:11px;
+        background:#fff;color:var(--ink2);font:14px inherit;margin-top:9px;cursor:pointer}
+
+  .hint{font-size:12px;color:var(--ink3);margin-top:9px;line-height:1.55}
+
+  /* 进度 */
+  .steps{list-style:none;margin:0;padding:0}
+  .steps li{display:flex;align-items:center;gap:10px;padding:7px 0;color:var(--ink3);font-size:14px}
+  .steps li .tick{width:18px;height:18px;border-radius:50%;border:1.5px solid #D5DAE4;
+                  display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;flex:none}
+  .steps li.done{color:var(--ink)}
+  .steps li.done .tick{background:#1E8E3E;border-color:#1E8E3E}
+  .steps li.now{color:var(--brand);font-weight:600}
+  .steps li.now .tick{border-color:var(--brand);border-top-color:transparent;
+                      animation:spin .8s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* 报告 */
+  .band{border-radius:12px;padding:14px;color:#fff;margin:-4px -4px 14px}
+  .band .lv{font-size:12px;opacity:.9;letter-spacing:.5px}
+  .band .one{font-size:16px;font-weight:600;line-height:1.5;margin-top:6px}
+
+  .axes{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+  .axis{background:#F7F8FA;border-radius:10px;padding:10px}
+  .axis .k{font-size:11.5px;color:var(--ink3)}
+  .axis .v{font-size:14px;font-weight:600;margin-top:2px}
+
+  .sec{margin-top:16px}
+  .sec h3{font-size:13px;color:var(--ink2);margin:0 0 8px;font-weight:600}
+
+  .hyp{border:1px solid var(--line);border-radius:11px;padding:11px;margin-bottom:8px}
+  .hyp .top{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+  .hyp .nm{font-size:14px;font-weight:600}
+  .hyp .cf{font-size:12px;color:var(--ink3);flex:none}
+  .bar{height:5px;border-radius:3px;background:#EDEFF3;margin:8px 0;overflow:hidden}
+  .bar i{display:block;height:100%;background:var(--brand);border-radius:3px}
+  .hyp .d{font-size:12.5px;color:var(--ink2);margin-top:3px}
+  .hyp .d b{color:var(--ink3);font-weight:500}
+
+  .ev{border-left:3px solid #F0D9A8;background:#FEFBF3;padding:9px 11px;border-radius:0 8px 8px 0;margin-bottom:8px}
+  .ev .q{font-size:13.5px;color:var(--ink);word-break:break-word}
+  .ev .w{font-size:12px;color:var(--ink2);margin-top:4px}
+
+  ul.todo,ul.unc{margin:0;padding-left:18px}
+  ul.todo li,ul.unc li{margin:5px 0;font-size:13.5px;color:var(--ink)}
+  .verify{background:#F2F7FF;border-radius:10px;padding:11px;font-size:13.5px;color:#28446E;line-height:1.6}
+
+  .disc{font-size:11.5px;color:var(--ink3);margin-top:14px;line-height:1.55}
+
+  /* 反诈小常识 */
+  .tipbox{background:#F7F8FA;border-radius:10px;padding:10px 12px;margin-top:12px;
+          font-size:12.5px;color:var(--ink2);line-height:1.6;min-height:46px;
+          transition:opacity .35s}
+  .tipbox b{color:var(--brand);font-weight:600}
+  .foot{text-align:center;font-size:11.5px;color:var(--ink3);margin-top:18px;line-height:1.7}
+  .hidden{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="logo"><span class="dot"></span>ChatGuard</div>
+    <div class="sub">把可疑对话贴进来，30 秒看清对方想干什么</div>
+  </header>
+
+  <!-- 输入 -->
+  <section class="card" id="cardInput">
+    <div class="tabs">
+      <div class="tab on" data-mode="text">粘贴聊天文本</div>
+      <div class="tab" data-mode="image">上传聊天截图</div>
+    </div>
+
+    <div id="paneText">
+      <textarea id="txt" placeholder="把可疑对话粘进来。建议带上说话人，例如：&#10;对方: 先垫付三单，做完连本带利返给你&#10;我: 要多少钱"></textarea>
+      <div class="row" id="samples">
+        <div class="chip" data-s="刷单">试试：刷单</div>
+        <div class="chip" data-s="客服">试试：冒充客服</div>
+        <div class="chip" data-s="玩笑">试试：熟人玩笑</div>
+      </div>
+    </div>
+
+    <div id="paneImage" class="hidden">
+      <div class="drop" id="drop">
+        <div id="dropTip">点击选择一张聊天截图<br><span style="font-size:12px">（建议只截对话区域，越清晰越准）</span></div>
+        <img id="preview" class="hidden" alt="">
+      </div>
+      <input type="file" id="file" accept="image/*" class="hidden">
+    </div>
+
+    <button class="primary" id="go">开始分析</button>
+    <div class="hint">不上传你的身份信息 · 可随时删除 · 判断仅供参考，不构成法律结论</div>
+  </section>
+
+  <!-- 进度 -->
+  <section class="card hidden" id="cardProgress">
+    <h2>正在分析</h2>
+
+    <ul class="steps" id="steps">
+      <li data-k="up"><span class="tick"></span><span>接收材料</span></li>
+      <li data-k="ocr"><span class="tick"></span><span>识别对话内容</span></li>
+      <li data-k="rules"><span class="tick"></span><span>比对话术与规则</span></li>
+      <li data-k="judge"><span class="tick"></span><span>研判风险</span></li>
+    </ul>
+
+    <div class="tipbox" id="tip"></div>
+    <div class="hint" id="progHint"></div>
+  </section>
+
+  <!-- 报告 -->
+  <section id="cardReport" class="hidden"></section>
+
+  <div class="foot">
+    AI 判断，仅供参考 · 遇到危险请拨 <b>110</b> / <b>96110</b><br>
+    遇到可疑的人不要打草惊蛇，先保存证据
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

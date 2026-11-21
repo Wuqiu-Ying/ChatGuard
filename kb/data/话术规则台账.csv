@@ -1,0 +1,31 @@
+﻿rule_id,rule_name,keywords,take,lever,min_level,source,enabled
+R01,垫付刷单,垫付，刷单，连本带利，返利任务，先垫后返，做满三单，三单,money,"benefit,urgency",medium,公安部十大高发类案-刷单返利,1
+R02,共享屏幕,共享屏幕，屏幕共享，远程控制，远程协助，投屏,"money,info",authority,high,20关键词-屏幕共享,1
+R03,先交钱,保证金，押金，定金，入职费，培训费，审核费，工号费，资料费，解冻费，激活费，会员费，手续费，代收,money,benefit,medium,高校案例-兼职押金/刷单,1
+R04,脱离平台,加我v，加个微信，加我微信，加我q，加qq，换个地方聊，私下交易，私下卖，平台收中介费，省去中介，不走平台，直接转账,money,"benefit,scarcity",medium,高校案例-闲鱼私下交易,1
+R05,诱导贷款征信,校园贷，征信修复，修复征信，注销校园贷，刷流水，提额，验资，激活额度，分期,money,"fear,urgency",medium,20关键词-修复征信/刷流水,1
+R06,百万保障,百万保障，误开通，关闭保障，免费保险,money,authority,high,20关键词-百万保障,1
+R07,安全账户,安全账户，资金清查，资金比对，涉嫌洗钱，涉案资金,money,"fear,authority",critical,20关键词-安全账户,1
+R08,冒充公检法,公检法，公安局，检察院，警官证，拘捕令，逮捕令，案件编号，协查,money,"fear,authority",critical,公安部十大高发类案-冒充公检法,1
+R09,保密施压,不许告诉，不能告诉任何人，全程保密，别挂电话，不要告诉家人，别跟别人说，别跟老师，别告诉我妈，别跟我妈，不要告诉导师，别告诉别人,"money,affection","bond,fear",high,央视杀猪盘-话术剧本,1
+R10,小众聊天软件,小众软件，小众聊天，加密聊天，这个软件保密，监管不到,money,"secrecy,benefit",high,20关键词-小众聊天软件,1
+R11,洗钱新手法,现金黄金，购买黄金，购物卡，取现，跑腿，网约车送,money,fear,high,20关键词-现金黄金/购物卡,1
+R12,帮信两卡,两卡，帮信，租借银行卡，卖卡，借卡，手机卡借用，走账，走一下账，收款通道，借我用,enlist,benefit,high,20关键词-两卡/帮信,1
+R13,裸聊敲诈,裸聊，录下来了，通讯录，发给你的同学，社死,"body,money","shame,fear",critical,公安部十大高发类案-裸聊敲诈,1
+R14,境外高薪,境外，月薪过万，包机票，园区，护照发我，海外直招,"enlist,body","benefit,fear",high,公安部通报-境外高薪诱骗,1
+R15,内部渠道投资,内部渠道，稳赚，内部消息，日化，保本高收益，老师带你,money,benefit,high,20关键词-内幕消息,1
+R16,冒充客服退款,三倍赔付，质量问题，快递丢了，理赔，退款通道,"money,info","authority,urgency",high,公安部十大高发类案-冒充客服,1
+R17,紧急借钱,急用钱，先借我，明天就还，马上还你，我真的很急,money,"bond,urgency",medium,公安部十大高发类案-冒充熟人,1
+R18,伪造官方身份,客服，专员，稽查，清算部,"money,info",authority,medium,通用,1
+R19,校园收费,教辅材料，班费，统一采购，班群，缴费通知,money,"authority,urgency",medium,高校变种-冒充辅导员,1
+R20,培训推销,保过，包过，上岸率，早鸟价，锁名额，压题，押题卷,money,"benefit,scarcity",medium,校园高频-保过班,1
+R21,票务代抢,内场票，看台票，主办方，电子票，锁票,money,scarcity,medium,高校变种-追星票务,1
+R22,涉密套取,实验数据，设备清单，课题数据，数据给我，署二作，联合课题，学术交流，对比一下数据,info,"bond,authority",high,国安部通报-学术交流套取,1
+R23,低价钓鱼,先付款，先付定金，验机，急出，抵债，先付一半,money,"benefit,scarcity",medium,高校案例-低价二手,1
+R24,虚假中奖,一等奖，中奖，抽奖活动，缴纳个人所得税，领奖，奖金，名额保留,money,benefit,medium,holdout v1 补录,1
+R25,荐股带单,荐股，交流群，老师带，涨停，席位费，回本，带单，荐股群,money,benefit,high,holdout v1 补录,1
+R26,会销引流,免费体检，送鸡蛋，专家现场，优惠套餐，会销，健康讲座，免费送,money,"benefit,belonging",medium,holdout v1 补录,1
+R27,索要验证码,验证码，校验码，动态码 / 发我，给我，提供，告诉我，说一下，念一下，填，输入，报一下，报给，收到后,"money,info",authority,high,组合规则,1
+R28,诱导下载,下载，安装，装个，下个 / app，软件，这个，链接，包，客户端,info,authority,medium,组合规则,1
+R29,扫码引流,扫码，扫一下，扫这个，二维码 / 领，进群，下载，支付，转账，添加，客服,money,benefit,medium,组合规则,1
+R30,加好友引流,加好友，加个好友，通过一下 / 手机号，微信，qq，号,money,benefit,medium,组合规则,1

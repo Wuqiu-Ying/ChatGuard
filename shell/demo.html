@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ChatGuard · 演示入口</title>
+<style>
+  :root{--bg:#EEF0F4;--card:#fff;--ink:#1A1D24;--ink2:#5C6273;--ink3:#8A90A0;
+        --line:#E6E8EE;--brand:#2F6FED;--crit:#D93025;--high:#E8710A;--ok:#1E8E3E}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:14px/1.6 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}
+  .wrap{max-width:1000px;margin:0 auto;padding:34px 18px 60px}
+
+  .head{text-align:center;margin-bottom:26px}
+  .logo{font-size:26px;font-weight:800;letter-spacing:.3px}
+  .logo span{color:var(--brand)}
+  .tagline{color:var(--ink3);font-size:13.5px;margin-top:8px}
+
+  .status{display:inline-flex;align-items:center;gap:7px;margin-top:14px;
+          font-size:12.5px;color:var(--ink2);background:#fff;border:1px solid var(--line);
+          padding:6px 13px;border-radius:999px}
+  .dotok{width:8px;height:8px;border-radius:50%;background:#C9CFDA}
+  .dotok.on{background:var(--ok);box-shadow:0 0 0 3px rgba(30,142,62,.15)}
+  .dotok.off{background:var(--crit);box-shadow:0 0 0 3px rgba(217,48,37,.15)}
+
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px}
+  @media (max-width:820px){ .grid{grid-template-columns:1fr} }
+
+  .card{background:var(--card);border-radius:16px;padding:20px;display:flex;flex-direction:column;
+        box-shadow:0 2px 6px rgba(16,24,40,.07);transition:.18s;text-decoration:none;color:inherit}
+  .card:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(16,24,40,.12)}
+  .badge{display:inline-block;font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:999px;
+         margin-bottom:12px;align-self:flex-start}
+  .c1 .badge{background:#EDF2FE;color:#2F6FED}
+  .c2 .badge{background:#EAF3FF;color:#26517F}
+  .c3 .badge{background:#F0F2F6;color:#414856}
+  .card h3{margin:0 0 7px;font-size:17px}
+  .card p{margin:0 0 16px;font-size:13px;color:var(--ink2);line-height:1.65;flex:1}
+  .go{font-size:13px;font-weight:600;color:var(--brand)}
+  .c2 .go{color:#26517F}
+  .c3 .go{color:#414856}
+
+  /* G 端三个入口：做成明显的按钮（不是标签） */
+  .subs{display:flex;flex-direction:column;gap:9px;margin-top:14px}
+  .subs a{display:flex;align-items:center;justify-content:space-between;gap:10px;
+          padding:12px 15px;border-radius:11px;background:#fff;
+          border:1px solid #DCE2EC;color:#26324A;text-decoration:none;
+          font-size:14.5px;font-weight:600;letter-spacing:.2px;
+          box-shadow:0 1px 2px rgba(16,24,40,.05);
+          transition:transform .15s,border-color .15s,box-shadow .15s}
+  .subs a:hover{border-color:#8FB4F5;transform:translateX(2px);
+                box-shadow:0 4px 12px rgba(91,141,239,.18)}
+  .subs a .arw{color:#5B8DEF;font-weight:700;font-size:15px;flex:none}
+
+  .opts{margin-top:22px;background:var(--card);border-radius:14px;padding:15px 18px;
+        box-shadow:0 1px 3px rgba(16,24,40,.06);display:flex;gap:22px;flex-wrap:wrap;
+        align-items:center;font-size:13px;color:var(--ink2)}
+  .opts label{display:flex;align-items:center;gap:7px;cursor:pointer}
+  .opts input{width:15px;height:15px;accent-color:var(--brand)}
+  .hintline{color:var(--ink3);font-size:12px}
+
+  .tips{margin-top:22px;background:#FBFCFE;border:1px solid var(--line);border-radius:14px;
+        padding:14px 18px;font-size:12.5px;color:var(--ink2);line-height:1.8}
+  .tips b{color:var(--ink)}
+  .foot{text-align:center;color:var(--ink3);font-size:11.5px;margin-top:22px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="head">
+    <div class="logo">Chat<span>Guard</span> · 演示入口</div>
+    <div class="tagline">一个判定内核，三种视角：学生 / 学校 / 监管</div>
+    <div class="status"><span class="dotok" id="dot"></span><span id="dotText">检查后端…</span></div>
+  </div>
+
+  <div class="grid">
+    <a class="card c1" href="index.html" id="linkC" target="_blank" rel="noopener">
+      <span class="badge">C 端 · 学生</span>
+      <h3>聊天反诈</h3>
+      <p>把可疑对话贴进来，或上传一张聊天截图。返回的是一张诊断报告：对方想干什么、你在哪一步、两种可能、以及现在该做什么。</p>
+      <span class="go">打开 →</span>
+    </a>
+
+    <a class="card c2" href="admin.html" target="_blank" rel="noopener">
+      <span class="badge">B 端 · 学校</span>
+      <h3>校园工作台</h3>
+      <p>辅导员看到的是告警队列，不是聊天记录。匿名 ID、类型、级别、建议动作，加一键生成周报。看不到原文，这是设计如此。</p>
+      <span class="go">打开 →</span>
+    </a>
+
+    <div class="card c3">
+      <span class="badge">G 端 · 监管 / 运营商</span>
+      <h3>数据视图</h3>
+      <p>只有载体线索与趋势，没有个人身份与原文。同一份数据，三种角色看到三种字段白名单。</p>
+      <div class="subs">
+        <a href="report.html?view=telecom" target="_blank" rel="noopener">运营商 <span class="arw">→</span></a>
+        <a href="report.html?view=police" target="_blank" rel="noopener">反诈中心 <span class="arw">→</span></a>
+        <a href="report.html?view=edu" target="_blank" rel="noopener">教育主管 <span class="arw">→</span></a>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="tips">
+    <b>建议的演示顺序</b>：① 学生端贴一段刷单话术 → 看红色告警卡；② 换成截图 → 看识别过程；
+    ③ 打开校园端 → 说明"学校只看到事件，看不到原文"；④ 打开运营商视图 → 说明"线索能变成拦截"。
+    <br><b>三个可以主动说的数字</b>：单次分析约 20 秒 · 文本约 10 资源点、图片约 30 点 · 测试集 30 条。
+  </div>
+
+  <div class="foot">ChatGuard · 演示环境 · 所有数据为样例</div>
+</div>
+<script>
+(() => {
+  const $ = s => document.querySelector(s);
+  const linkC = $('#linkC');
+
+
+  fetch('/api/health').then(r => r.json()).then(d => {
+    const dot = $('#dot');
+    if (d.ok) {
+      dot.classList.add('on');
+      $('#dotText').textContent = '后端已连接 · 真实调用可用';
+    } else {
+      dot.classList.add('off');
+      $('#dotText').textContent = '后端未就绪 · 请在控制面板开启「使用测试样例」';
+    }
+  }).catch(() => {
+    $('#dot').classList.add('off');
+    $('#dotText').textContent = '连不上后端 · 请用离线演示模式';
+  });
+})();
+</script>
+</body>
+</html>

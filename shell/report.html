@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ChatGuard · 数据视图</title>
+<style>
+  :root{--bg:#F4F5F7;--card:#fff;--ink:#1A1D24;--ink2:#5C6273;--ink3:#8A90A0;
+        --line:#E6E8EE;--brand:#2F6FED;--warn:#B8860B}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:14px/1.6 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}
+  .wrap{max-width:1000px;margin:0 auto;padding:64px 16px 50px}
+
+  header{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:16px}
+  .brand{display:flex;align-items:center;gap:9px;font-size:17px;font-weight:700}
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--brand)}
+  .role{font-size:15px;font-weight:600;margin-top:2px}
+  .sub{font-size:12.5px;color:var(--ink3);margin-top:3px;max-width:640px}
+  .ro{font-size:11.5px;color:#26517F;background:#EAF3FF;border:1px solid #CFE0FB;
+      padding:4px 9px;border-radius:999px;white-space:nowrap}
+
+  .switcher{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+  .switcher a{font-size:12.5px;color:var(--ink2);text-decoration:none;padding:6px 12px;
+              border-radius:999px;background:#F0F2F6}
+  .switcher a.on{background:var(--brand);color:#fff;font-weight:600}
+
+  .card{background:var(--card);border-radius:12px;padding:15px;margin-bottom:12px;
+        box-shadow:0 1px 2px rgba(16,24,40,.05)}
+  .card h2{margin:0 0 12px;font-size:13px;color:var(--ink2);font-weight:600}
+
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{text-align:left;padding:8px 6px;border-bottom:1px solid #F0F2F6;vertical-align:top}
+  th{font-size:11.5px;color:var(--ink3);font-weight:500;white-space:nowrap}
+  td.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px}
+  tr:last-child td{border-bottom:0}
+  .tag{font-size:11px;padding:1px 7px;border-radius:999px;background:#F2F3F6;color:var(--ink2)}
+  .tag.ok{background:#E8F5EC;color:#1E6B3A}
+  .tag.no{background:#FDECEA;color:#A3302A}
+
+  .bars{display:flex;flex-direction:column;gap:9px}
+  .barrow{display:grid;grid-template-columns:132px 1fr 88px;gap:9px;align-items:center;font-size:12.5px}
+  .track{height:8px;border-radius:4px;background:#EFF1F5;overflow:hidden}
+  .track i{display:block;height:100%;background:var(--brand);border-radius:4px}
+  .num{text-align:right;color:var(--ink3);font-size:12px}
+
+  .allow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .allowbox{background:#FBFCFE;border:1px solid var(--line);border-radius:10px;padding:11px 12px}
+  .allowbox h3{margin:0 0 6px;font-size:12px;color:var(--ink2);font-weight:600}
+  .chips{display:flex;flex-wrap:wrap;gap:6px}
+  .chip{font-size:11.5px;padding:2px 8px;border-radius:6px;background:#F2F3F6;color:var(--ink2)}
+  .chip.yes{background:#E8F5EC;color:#1E6B3A}
+  .chip.no{background:#FDECEA;color:#A3302A}
+
+  /* 折叠面板 */
+  details.allowwrap summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px;
+    font-size:13px;color:var(--ink2);font-weight:600;user-select:none}
+  details.allowwrap summary::-webkit-details-marker{display:none}
+  details.allowwrap summary::marker{content:""}
+  details.allowwrap .caret{width:0;height:0;flex:none;
+    border-left:5px solid transparent;border-right:5px solid transparent;
+    border-top:6px solid #AEB5C4;transition:transform .18s}
+  details.allowwrap[open] .caret{transform:rotate(180deg)}
+  details.allowwrap .hintline{font-size:11.5px;color:var(--ink3);font-weight:400}
+  details.allowwrap .body{margin-top:12px}
+
+
+  /* 数据源切换条 */
+  .srcbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+  .srcbtn{border:0;cursor:pointer;border-radius:14px;padding:14px 26px;
+          font:600 15px/1 inherit;color:#fff;letter-spacing:.5px;
+          background:linear-gradient(110deg,#5B8DEF,#8B5CF6,#EC4899,#F59E0B,#5B8DEF);
+          background-size:300% 100%;animation:flow 7s linear infinite;
+          box-shadow:0 6px 18px rgba(91,141,239,.35);transition:.18s}
+  .srcbtn.off{background:#E9ECF2;color:#5C6273;animation:none;box-shadow:none}
+  .srcbtn:hover{transform:translateY(-1px)}
+  @keyframes flow{0%{background-position:0% 0}100%{background-position:300% 0}}
+  .srcbtn .sdot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#fff;
+                margin-right:9px;vertical-align:middle}
+  .srcbtn.off .sdot{background:#9AA1AE}
+  .refbtn{border:1px solid var(--line);background:#fff;color:var(--ink2);cursor:pointer;
+          border-radius:12px;padding:13px 20px;font:600 14px/1 inherit}
+  .refbtn:hover{background:#F7F8FA}
+  .srchint{font-size:12px;color:var(--ink3)}
+  .note{font-size:12.5px;color:var(--ink2);line-height:1.7}
+  .foot{text-align:center;color:var(--ink3);font-size:11.5px;margin-top:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div>
+      <div class="brand"><span class="dot"></span>ChatGuard · 数据视图</div>
+      <div class="role" id="roleTitle">加载中…</div>
+      <div class="sub" id="roleSub"></div>
+    </div>
+    <div class="ro">只读 · 演示数据</div>
+  </header>
+
+  <div class="switcher">
+    <a href="?view=telecom" data-v="telecom">运营商</a>
+    <a href="?view=police"  data-v="police">反诈中心</a>
+    <a href="?view=edu"     data-v="edu">教育主管</a>
+    <a href="demo.html">← 返回入口</a>
+  </div>
+
+
+  <div class="srcbar">
+    <button id="btnSample" class="srcbtn"><span class="sdot"></span>演示数据</button>
+    <button id="btnRefresh" class="refbtn">刷新</button>
+    <span class="srchint" id="srcHint">当前使用演示数据；关闭开关后从后端拉取真实记录</span>
+  </div>
+  <section class="card">
+    <details class="allowwrap">
+      <summary><span class="caret"></span>这个角色能看到什么 <span class="hintline">（点击展开）</span></summary>
+      <div class="body">
+        <div class="allow">
+          <div class="allowbox">
+            <h3>可见</h3>
+            <div class="chips" id="vis"></div>
+          </div>
+          <div class="allowbox">
+            <h3>永远不可见</h3>
+            <div class="chips" id="hid"></div>
+          </div>
+        </div>
+        <div class="note" style="margin-top:11px" id="roleNote"></div>
+      </div>
+    </details>
+  </section>
+
+  <div id="content"></div>
+
+  <div class="foot">ChatGuard 数据视图 · 数据为演示样例 · 不构成执法依据</div>
+</div>
+<script src="report.js"></script>
+</body>
+</html>
